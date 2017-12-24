@@ -25,7 +25,7 @@ namespace WebSocketsPOC.WebSockets
 
         public override Task<bool> InitializeAsync()
         {
-            return Task.FromResult(true);
+            return Task.FromResult(eventBus.isConnected());
         }
 
         public override void Publish<TDataType>(string topic, TDataType data)

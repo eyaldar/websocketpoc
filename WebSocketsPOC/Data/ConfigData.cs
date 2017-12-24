@@ -13,7 +13,7 @@ namespace WebSocketsPOC.Data
     {
         private ConfigData() { }
 
-        public string ClientName { get; set; }
+        public string ClientBaseName { get; set; }
         public int ZoomChangeInterval { get; set; }
         public string Hostname { get; set; }
         public int Port { get; set; }

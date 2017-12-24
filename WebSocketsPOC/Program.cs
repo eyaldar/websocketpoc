@@ -14,12 +14,14 @@ namespace WebSocketsPOC
     {
         static async Task Main(string[] args)
         {
+            var rnd = new Random(Guid.NewGuid().GetHashCode());
+            var clientName = ConfigData.Instance.ClientBaseName + rnd.Next();
             var factory = new WebSocketClientFactory();
             var client = factory.Create(ConfigData.Instance.Hostname, ConfigData.Instance.Port, ConfigData.Instance.ClientType);
 
             if(await client.InitializeAsync())
             {
-                var vm = new POCViewModel(client);
+                var vm = new POCViewModel(client, clientName);
                 await vm.StartUpdatesListener();
             }
 

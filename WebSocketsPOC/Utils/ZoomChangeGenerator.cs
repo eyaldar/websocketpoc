@@ -47,7 +47,7 @@ namespace WebSocketsPOC.Utils
             while(IsRunning)
             {
                 var boundingBoxRequest = new BoundingBoxRequest(
-                    name: ConfigData.Instance.ClientName,
+                    name: vm.ClientName,
                     minLongitude: 30 + r.NextDouble() + 5,
                     minLatitude: 30 + r.NextDouble() * 5,
                     maxLongitude: 35 + r.NextDouble() * 5,

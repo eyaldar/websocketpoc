@@ -14,12 +14,14 @@ namespace WebSocketsPOC.VM
         private IWebSocketClient client;
         private ZoomChangeGenerator generator;
 
+        public string ClientName { get; protected set; }
         public bool IsInitialized { get; protected set; }
         public Dictionary<string, Entity> IDToEntity { get; protected set; }
 
-        public POCViewModel(IWebSocketClient client)
+        public POCViewModel(IWebSocketClient client, string clientName)
         {
             this.client = client;
+            this.ClientName = clientName;
             IDToEntity = new Dictionary<string, Entity>();
             generator = new ZoomChangeGenerator(this);
             generator.Start();
@@ -32,7 +34,7 @@ namespace WebSocketsPOC.VM
 
         public async Task StartUpdatesListener()
         {
-            await client.SubscribeAsync(ConfigData.Instance.ClientName, OnEntityArrived);
+            await client.SubscribeAsync(ClientName, OnEntityArrived);
         }
 
         private void OnEntityArrived(object data)
