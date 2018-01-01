@@ -23,6 +23,14 @@ namespace WebSocketsPOC.WebSockets
             defaultHeaders = new Headers();
         }
 
+        public override JObject ExtractMessage(object data)
+        {
+            var jdata = data as JObject;
+            var msg = jdata["body"] as JObject;
+
+            return msg;
+        }
+
         public override Task<bool> InitializeAsync()
         {
             return Task.FromResult(eventBus.isConnected());

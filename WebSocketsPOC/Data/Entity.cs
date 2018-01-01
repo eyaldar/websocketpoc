@@ -9,19 +9,22 @@ namespace WebSocketsPOC.Data
 
         }
         
-        public Entity(string id, double longitude, double latitude, DateTime lastUpdateTime, double someData)
+        public Entity(string id, double longitude, double latitude, DateTime lastUpdateTime, double someData, string action)
         {
-            ID = id;
-            Longitude = longitude;
-            Latitude = latitude;
-            LastUpdateTime = lastUpdateTime;
-            SomeData = someData;
+            this.id = id;
+            this.longitude = longitude;
+            this.latitude = latitude;
+            this.lastUpdateTime = lastUpdateTime;
+            this.someData = someData;
+            this.action = action;
         }
 
-        public string ID { get; set; }
-        public double Longitude { get; set; }
-        public double Latitude { get; set; }
-        public DateTime LastUpdateTime { get; set; }
-        public double SomeData { get; set; }
+        public string id { get; set; }
+        public double longitude { get; set; }
+        public double latitude { get; set; }
+        public DateTime lastUpdateTime { get; set; }
+        public DateTime distributionTime { get; set; }
+        public double someData { get; set; }
+        public string action { get; set; }
     }
 }

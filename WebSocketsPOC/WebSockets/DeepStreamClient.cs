@@ -1,4 +1,5 @@
 ﻿using DeepStreamNet.Contracts;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,11 @@ namespace WebSocketsPOC.WebSockets
         {
             subscriptions = new List<IAsyncDisposable>();
             client = new DeepStreamNet.DeepStreamClient(hostname, (short)port);
+        }
+
+        public override JObject ExtractMessage(object data)
+        {
+            return data as JObject;
         }
 
         public override Task<bool> InitializeAsync()

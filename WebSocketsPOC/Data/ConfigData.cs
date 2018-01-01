@@ -17,6 +17,7 @@ namespace WebSocketsPOC.Data
         public int ZoomChangeInterval { get; set; }
         public string Hostname { get; set; }
         public int Port { get; set; }
+        public int Workers { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         public WebSocketClientType ClientType { get; set; }

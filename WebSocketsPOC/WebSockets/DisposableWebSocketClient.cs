@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,8 @@ namespace WebSocketsPOC.WebSockets
         public abstract void Publish<TDataType>(string topic, TDataType data);
 
         public abstract Task SubscribeAsync(string topic, Action<object> handler);
+
+        public abstract JObject ExtractMessage(object data);
 
         #region Disposable Pattern
 

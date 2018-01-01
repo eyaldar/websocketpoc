@@ -1,7 +1,8 @@
 ﻿{
     "ClientBaseName": "client",
-    "ZoomChangeInterval": 4000,
-    "ClientType": "VertX",
-    "Hostname": "192.168.0.60",
-    "Port": 7000 // 6020
+    "ZoomChangeInterval": 5000,
+    "ClientType": "DeepStream",
+    "Hostname": "192.168.0.53",
+    "Port": 6020, // 7000,
+    "Workers": 1
 }
