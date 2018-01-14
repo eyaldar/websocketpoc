@@ -51,6 +51,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\DistributionWorker.cs" />
+    <Compile Include="Utils\IStatisticsCollector.cs" />
+    <Compile Include="Utils\ReaderWriterLockSlimExtensions.cs" />
+    <Compile Include="Utils\StatisticsCollector.cs" />
     <Compile Include="Utils\ZoomChangeGenerator.cs" />
     <Compile Include="VM\POCViewModel.cs" />
     <Compile Include="WebSockets\DeepStreamClient.cs" />
