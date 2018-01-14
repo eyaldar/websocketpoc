@@ -56,7 +56,7 @@ namespace WebSocketsPOC.Utils
 
                     if (msg["action"].ToString() == "delete")
                     {
-                        Console.Out.WriteLine(msg);
+                        //Console.Out.WriteLine(msg);
                     }
                     else
                     {
