@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
@@ -7,20 +6,15 @@
     <ApplicationIcon />
     <StartupObject />
   </PropertyGroup>
-
   <ItemGroup>
     <Content Include="config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
   <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="6.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="DeepStreamNet" Version="0.0.0.4-alpha" />
+    <PackageReference Include="vertx-eventbus" Version="2.2.0-pre" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\DeepStreamNet\DeepStreamNet.csproj" />
-    <ProjectReference Include="..\vertx-eventbus\vertx-eventbus.csproj" />
-  </ItemGroup>
-
 </Project>
