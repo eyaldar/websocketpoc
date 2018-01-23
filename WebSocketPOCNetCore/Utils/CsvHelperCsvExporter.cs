@@ -9,14 +9,16 @@ namespace WebSocketsPOC
 {
     public class CsvHelperCsvExporter : ICsvExporter
     {
-        public void Export(string savePath, IList<string> columnNames, TimeSpan[][] data)
+        public void Export<TDataType>(string savePath, string[] columnNames, TDataType[][] data)
         {
             var records = new List<dynamic>();
+
             for(int i = 0; i < data[0].Length; i++)
             {
                 dynamic obj = new ExpandoObject();
                 var dObj = obj as IDictionary<string, object>;
-                for(int j = 0; j < columnNames.Count; j++)
+
+                for(int j = 0; j < columnNames.Length; j++)
                 {
                     dObj[columnNames[j]] = data[j][i];
                 }

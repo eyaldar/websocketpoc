@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace WebSocketsPOC
 {
-    public interface ICsvExporter    
+    public interface ICsvExporter
     {
-        void Export(string filePath, IList<string> columnNames, TimeSpan[][] data);
+        void Export<TDataType>(string filePath, string[] columnNames, TDataType[][] data);
     }
 }

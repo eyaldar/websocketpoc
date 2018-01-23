@@ -14,6 +14,7 @@ namespace WebSocketsPOC
     {
         static async Task Main(string[] args)
         {
+            POCViewModel vm = null;
             var rnd = new Random(Guid.NewGuid().GetHashCode());
             var clientName = ConfigData.Instance.ClientBaseName + rnd.Next();
             var factory = new WebSocketClientFactory();
@@ -21,13 +22,16 @@ namespace WebSocketsPOC
 
             if(await client.InitializeAsync())
             {
-                var vm = new POCViewModel(client, clientName);
+                vm = new POCViewModel(client, clientName);
                 await vm.StartUpdatesListener();
             }
 
-            await Task.Delay(30000);
+            await Task.Delay(ConfigData.Instance.TotalRuntime);
 
-            Console.ReadKey();
+            if(vm != null)
+                vm.Dispose();
+
+            Environment.Exit(0);
         }
     }
 }

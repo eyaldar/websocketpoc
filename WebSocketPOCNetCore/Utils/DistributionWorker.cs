@@ -9,21 +9,25 @@ namespace WebSocketsPOC.Utils
 {
     public class DistributionWorker
     {
+        private int entitiesCounter = 0;
         private BlockingCollection<DistributionWorkItem> pendingQueue;
-        private IStatisticsCollector distributionStatisticsCollector;
-        private IStatisticsCollector lastUpdateStatisticsCollector;
+        private IStatisticsCollector<double> triggerStatisticsCollector;
+        private IStatisticsCollector<double> redisStatisticsCollector;
+        private IStatisticsCollector<double> entitiesAmountStatisticsCollector;
         private IWebSocketClient client;
         private Task distributionWorkerTask;
 
         public DistributionWorker(IWebSocketClient client,
-                                  IStatisticsCollector distributionStatisticsCollector,
-                                  IStatisticsCollector lastUpdateStatisticsCollector,
+                                  IStatisticsCollector<double> triggerStatisticsCollector,
+                                  IStatisticsCollector<double> redisStatisticsCollector,
+                                  IStatisticsCollector<double> entitiesAmountStatisticsCollector,
                                   BlockingCollection<DistributionWorkItem> pendingQueue)
         {
             this.client = client;
             this.pendingQueue = pendingQueue;
-            this.distributionStatisticsCollector = distributionStatisticsCollector;
-            this.lastUpdateStatisticsCollector = lastUpdateStatisticsCollector;
+            this.triggerStatisticsCollector = triggerStatisticsCollector;
+            this.redisStatisticsCollector = redisStatisticsCollector;
+            this.entitiesAmountStatisticsCollector = entitiesAmountStatisticsCollector;
         }
 
         public bool IsRunning { get; private set; }
@@ -42,6 +46,7 @@ namespace WebSocketsPOC.Utils
             if (distributionWorkerTask != null)
             {
                 IsRunning = false;
+                pendingQueue.CompleteAdding();
                 distributionWorkerTask.Wait();
             }
         }
@@ -54,19 +59,23 @@ namespace WebSocketsPOC.Utils
                 { 
                     var msg = client.ExtractMessage(workItem.Data);
 
-                    if (msg["action"].ToString() == "delete")
+                    if (msg["triggerTime"] != null)  
                     {
-                        //Console.Out.WriteLine(msg);
+                        Entity entity = JsonConvert.DeserializeObject<Entity>(msg.ToString());
+                        TimeSpan triggerDelta = workItem.ArrivalTime.ToUniversalTime() - entity.triggerTime.ToUniversalTime();
+
+                        entitiesAmountStatisticsCollector.Add(entitiesCounter);
+                        entitiesCounter = 0;
+
+                        triggerStatisticsCollector.Add(triggerDelta.TotalMilliseconds);
+                        redisStatisticsCollector.Add(entity.redisDelta);
+                        Console.Out.WriteLine($"redis delta avg: {redisStatisticsCollector.Average}ms " +
+                                              $"trigger delta: {triggerStatisticsCollector.Average}ms, " +
+                                              $"entities avg: {entitiesAmountStatisticsCollector.Average}");
                     }
                     else
                     {
-                        Entity entity = JsonConvert.DeserializeObject<Entity>(msg.ToString());
-                        var lastUpdateDelta = workItem.ArrivalTime - entity.lastUpdateTime;
-                        var distributionDelta = workItem.ArrivalTime - entity.distributionTime;
-                        //Console.Out.WriteLine(msg);
-                        distributionStatisticsCollector.Add(distributionDelta);
-                        lastUpdateStatisticsCollector.Add(lastUpdateDelta);
-                        Console.Out.WriteLine($"last update avg: {lastUpdateStatisticsCollector.Average.TotalMilliseconds}ms distribution delta: {distributionStatisticsCollector.Average.TotalMilliseconds}ms");
+                        entitiesCounter++;
                     }
                 }
             }

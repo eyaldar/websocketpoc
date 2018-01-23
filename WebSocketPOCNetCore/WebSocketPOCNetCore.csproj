@@ -17,4 +17,7 @@
     <PackageReference Include="DeepStreamNet" Version="0.0.0.4-alpha" />
     <PackageReference Include="vertx-eventbus" Version="2.2.0-pre" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Utils\TimeSpanStatisticsCollector.cs" />
+  </ItemGroup>
 </Project>

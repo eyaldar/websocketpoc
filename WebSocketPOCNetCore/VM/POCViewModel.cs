@@ -1,15 +1,11 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using WebSocketsPOC.Data;
 using WebSocketsPOC.Utils;
 using WebSocketsPOC.WebSockets;
+using WebSocketPOCNetCore.Utils;
 
 namespace WebSocketsPOC.VM
 {
@@ -18,8 +14,10 @@ namespace WebSocketsPOC.VM
         private BlockingCollection<DistributionWorkItem> workQueue;
         private IWebSocketClient client;
         private ZoomChangeGenerator generator;
-        private IStatisticsCollector distributionStatisticsCollector;
-        private IStatisticsCollector lastUpdateStatisticsCollector;
+        private IStatisticsCollector<double> triggerStatisticsCollector;
+        private IStatisticsCollector<double> redisStatisticsCollector;
+        private IStatisticsCollector<double> entitiesAmountStatisticsCollector;
+        private ICsvExporter csvExporter;
         private List<DistributionWorker> workers;
 
         public string ClientName { get; protected set; }
@@ -32,8 +30,11 @@ namespace WebSocketsPOC.VM
             this.ClientName = clientName;
             IDToEntity = new Dictionary<string, Entity>();
 
-            distributionStatisticsCollector = new StatisticsCollector();
-            lastUpdateStatisticsCollector = new StatisticsCollector();
+            triggerStatisticsCollector = new NumberStatisticsCollector();
+            redisStatisticsCollector = new NumberStatisticsCollector();
+            entitiesAmountStatisticsCollector = new NumberStatisticsCollector();
+
+            csvExporter = new CsvHelperCsvExporter();
 
             generator = new ZoomChangeGenerator(this);
             generator.Start();
@@ -43,7 +44,7 @@ namespace WebSocketsPOC.VM
 
             for (int i = 0; i < ConfigData.Instance.Workers; i++)
             {
-                var worker = new DistributionWorker(client, distributionStatisticsCollector, lastUpdateStatisticsCollector, workQueue);
+                var worker = new DistributionWorker(client, triggerStatisticsCollector, redisStatisticsCollector, entitiesAmountStatisticsCollector, workQueue);
                 workers.Add(worker);
                 worker.Start();
             }
@@ -88,7 +89,26 @@ namespace WebSocketsPOC.VM
                 }
 
                 workers.Clear();
+
+                CreateCSVs();
             }
+        }
+
+        private void CreateCSVs()
+        {
+            csvExporter.Export("timespanData.csv",
+                               new string[] { "Redis Delta", "Trigger Delta" },
+                               new double[][]
+                                {
+                                        redisStatisticsCollector.DataPoints,
+                                        triggerStatisticsCollector.DataPoints
+                                });
+            csvExporter.Export("numberOfEntities.csv",
+               new string[] { "Num of Entities" },
+               new double[][]
+                {
+                        entitiesAmountStatisticsCollector.DataPoints,
+                });
         }
 
         ~POCViewModel()

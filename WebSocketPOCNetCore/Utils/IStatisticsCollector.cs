@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace WebSocketsPOC.Utils
 {
-    public interface IStatisticsCollector
+    public interface IStatisticsCollector<TDataType>
     {
-        TimeSpan Average { get; }
-        void Add(TimeSpan time);
+        TDataType Average { get; }
+        TDataType[] DataPoints { get; }
+        void Add(TDataType time);
         void Reset();
     }
 }
