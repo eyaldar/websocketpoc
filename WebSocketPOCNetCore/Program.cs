@@ -14,19 +14,28 @@ namespace WebSocketsPOC
     {
         static async Task Main(string[] args)
         {
+            if (args.Length < 6)
+                return;
+
             POCViewModel vm = null;
             var rnd = new Random(Guid.NewGuid().GetHashCode());
             var clientName = ConfigData.Instance.ClientBaseName + rnd.Next();
+            var bbr = new BoundingBoxRequest(name: clientName,
+                                             minLongitude: int.Parse(args[1]),
+                                             minLatitude: int.Parse(args[3]),
+                                             maxLongitude: int.Parse(args[2]),
+                                             maxLatitude: int.Parse(args[4]));
+
             var factory = new WebSocketClientFactory();
             var client = factory.Create(ConfigData.Instance.Hostname, ConfigData.Instance.Port, ConfigData.Instance.ClientType);
 
             if(await client.InitializeAsync())
             {
-                vm = new POCViewModel(client, clientName);
+                vm = new POCViewModel(client, clientName, bbr);
                 await vm.StartUpdatesListener();
             }
 
-            await Task.Delay(ConfigData.Instance.TotalRuntime);
+            await Task.Delay(int.Parse(args[5]));
 
             if(vm != null)
                 vm.Dispose();

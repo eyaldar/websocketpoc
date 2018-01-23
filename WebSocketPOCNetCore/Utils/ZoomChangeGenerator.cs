@@ -12,11 +12,13 @@ namespace WebSocketsPOC.Utils
     public class ZoomChangeGenerator
     {
         private POCViewModel vm;
+        private BoundingBoxRequest boundingBoxRequest;
         private Thread generatorThread;
 
-        public ZoomChangeGenerator(POCViewModel vm)
+        public ZoomChangeGenerator(POCViewModel vm, BoundingBoxRequest bbr)
         {
             this.vm = vm;
+            this.boundingBoxRequest = bbr;
         }
 
         public bool IsRunning { get; private set; }
@@ -46,13 +48,6 @@ namespace WebSocketsPOC.Utils
             Random r = new Random(Guid.NewGuid().GetHashCode());
             while(IsRunning)
             {
-                var boundingBoxRequest = new BoundingBoxRequest(
-                name: vm.ClientName,
-                minLongitude: 30 + r.NextDouble() + 5,
-                minLatitude: 30 + r.NextDouble() * 5,
-                maxLongitude: 35 + r.NextDouble() * 5,
-                maxLatitude: 35 + r.NextDouble() * 5);
-
                 vm.ChangeZoom(boundingBoxRequest);
 
                 Console.WriteLine($"Sent server change zoom request with values: Name: {boundingBoxRequest.name} " +

@@ -24,7 +24,7 @@ namespace WebSocketsPOC.VM
         public bool IsInitialized { get; protected set; }
         public Dictionary<string, Entity> IDToEntity { get; protected set; }
 
-        public POCViewModel(IWebSocketClient client, string clientName)
+        public POCViewModel(IWebSocketClient client, string clientName, BoundingBoxRequest bbr)
         {
             this.client = client;
             this.ClientName = clientName;
@@ -36,7 +36,7 @@ namespace WebSocketsPOC.VM
 
             csvExporter = new CsvHelperCsvExporter();
 
-            generator = new ZoomChangeGenerator(this);
+            generator = new ZoomChangeGenerator(this, bbr);
             generator.Start();
 
             workQueue = new BlockingCollection<DistributionWorkItem>();

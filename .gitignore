@@ -3,6 +3,7 @@
 
 # Mac Specific
 .DS_Store
+.csv
 
 # User-specific files
 *.suo

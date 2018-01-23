@@ -18,7 +18,6 @@ namespace WebSocketsPOC.Data
         public string Hostname { get; set; }
         public int Port { get; set; }
         public int Workers { get; set; }
-        public int TotalRuntime { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         public WebSocketClientType ClientType { get; set; }
