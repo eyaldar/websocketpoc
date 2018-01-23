@@ -31,7 +31,7 @@ namespace WebSocketsPOC
 
             if(await client.InitializeAsync())
             {
-                vm = new POCViewModel(client, clientName, bbr);
+                vm = new POCViewModel(client, clientName, bbr, args[0]);
                 await vm.StartUpdatesListener();
             }
 

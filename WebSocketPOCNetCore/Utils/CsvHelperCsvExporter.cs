@@ -9,6 +9,13 @@ namespace WebSocketsPOC
 {
     public class CsvHelperCsvExporter : ICsvExporter
     {
+        private string filePrefix;
+
+        public CsvHelperCsvExporter(string preFix)
+        {
+            this.filePrefix = preFix;
+        }
+
         public void Export<TDataType>(string savePath, string[] columnNames, TDataType[][] data)
         {
             var records = new List<dynamic>();
@@ -27,7 +34,7 @@ namespace WebSocketsPOC
             }
 
 
-            using (var txtWriter = new StreamWriter(savePath))
+            using (var txtWriter = new StreamWriter(filePrefix + savePath))
             {
                 var csv = new CsvWriter(txtWriter);
                 csv.WriteRecords(records);
