@@ -1,6 +1,6 @@
 ﻿{
     "ClientBaseName": "client",
-    "ZoomChangeInterval": 530000,
+    "ZoomChangeInterval": 5000,
     "ClientType": "DeepStream",
     "Hostname": "192.168.0.53",
     "Port": 6020, // 7000,

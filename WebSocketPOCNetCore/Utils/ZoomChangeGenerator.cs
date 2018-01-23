@@ -43,21 +43,15 @@ namespace WebSocketsPOC.Utils
 
         private void GenerateZoomChanges()
         {
-            //Random r = new Random(Guid.NewGuid().GetHashCode());
-            //while(IsRunning)
-            //{
-                //var boundingBoxRequest = new BoundingBoxRequest(
-                //name: vm.ClientName,
-                //minLongitude: 30 + r.NextDouble() + 5,
-                //minLatitude: 30 + r.NextDouble() * 5,
-                //maxLongitude: 35 + r.NextDouble() * 5,
-                //maxLatitude: 35 + r.NextDouble() * 5);
+            Random r = new Random(Guid.NewGuid().GetHashCode());
+            while(IsRunning)
+            {
                 var boundingBoxRequest = new BoundingBoxRequest(
-                    name: vm.ClientName,
-                    minLatitude: 31,
-                    minLongitude: 31,
-                    maxLatitude: 35,
-                    maxLongitude: 35);
+                name: vm.ClientName,
+                minLongitude: 30 + r.NextDouble() + 5,
+                minLatitude: 30 + r.NextDouble() * 5,
+                maxLongitude: 35 + r.NextDouble() * 5,
+                maxLatitude: 35 + r.NextDouble() * 5);
 
                 vm.ChangeZoom(boundingBoxRequest);
 
@@ -65,8 +59,8 @@ namespace WebSocketsPOC.Utils
                     $"MinLongitude: {boundingBoxRequest.minLongitude} MinLatitude: {boundingBoxRequest.minLatitude} " +
                     $"MaxLongitude: {boundingBoxRequest.maxLongitude} MaxLatitude: {boundingBoxRequest.maxLatitude}");
 
-            //    Thread.Sleep(ConfigData.Instance.ZoomChangeInterval);
-            //}
+                Thread.Sleep(ConfigData.Instance.ZoomChangeInterval);
+            }
         }
     }
 }
